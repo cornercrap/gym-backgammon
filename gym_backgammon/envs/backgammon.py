@@ -80,6 +80,16 @@ class Backgammon:
             return self.board[target][0] < 2 or (self.board[target][0] > 1 and self.board[target][1] == player)
         return False
 
+    def is_back_gammon(self):
+        loser = self.get_opponent(self.get_winner())
+        exist_home = [pos for pos in self.players_home_positions[self.get_winner()] if self.board[pos][loser]]
+
+        return len(exist_home) > 0 or self.bar[loser]
+
+    def is_gammon(self):
+        loser = self.get_opponent(self.get_winner())
+        return True if self.off[loser] == 0 else False
+
     # =================================================================================
     # NORMAL PLAYS ====================================================================
     # =================================================================================

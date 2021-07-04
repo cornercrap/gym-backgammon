@@ -49,8 +49,16 @@ class BackgammonEnv(gym.Env):
         if winner is not None or self.counter > self.max_length_episode:
             # practical-issues-in-temporal-difference-learning, pag.3
             # ...leading to a final reward signal z. In the simplest case, z = 1 if White wins and z = 0 if Black wins
+            reward_rate = 1
+            if self.game.is_back_gammon():
+                reward_rate = 3
+            elif self.game.is_gammon():
+                reward_rate = 2
+
             if winner == WHITE:
-                reward = 1
+                reward = 1 * reward_rate
+            else:
+                reward = -1 * reward_rate
             done = True
 
         self.counter += 1
@@ -115,7 +123,8 @@ class BackgammonEnvPixel(BackgammonEnv):
 
     def __init__(self):
         super(BackgammonEnvPixel, self).__init__()
-        self.observation_space = Box(low=0, high=255, shape=(STATE_H, STATE_W, 3), dtype=np.uint8)
+        self.observation_space = Box(low=0, high=255, shape=(
+            STATE_H, STATE_W, 3), dtype=np.uint8)
 
     def step(self, action):
         observation, reward, done, winner = super().step(action)

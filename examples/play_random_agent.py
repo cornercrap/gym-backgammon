@@ -64,9 +64,11 @@ def make_plays():
             tot = wins[WHITE] + wins[BLACK]
             tot = tot if tot > 0 else 1
 
-            print("Game={} | Winner={} after {:<4} plays || Wins: {}={:<6}({:<5.1f}%) | {}={:<6}({:<5.1f}%) | Duration={:<.3f} sec".format(1, winner, i,
-                agents[WHITE].name, wins[WHITE], (wins[WHITE] / tot) * 100,
-                agents[BLACK].name, wins[BLACK], (wins[BLACK] / tot) * 100, time.time() - t))
+            # print("Game={} | Winner={} after {:<4} plays || Wins: {}={:<6}({:<5.1f}%) | {}={:<6}({:<5.1f}%) | Duration={:<.3f} sec".format(1, winner, i,
+            #     agents[WHITE].name, wins[WHITE], (wins[WHITE] / tot) * 100,
+            #     agents[BLACK].name, wins[BLACK], (wins[BLACK] / tot) * 100, time.time() - t))
+
+            print("winner {} | after {} | reward {} | duration {:<.3f} sec".format(COLORS[agent.color], i, reward, time.time() - t))
 
             break
 

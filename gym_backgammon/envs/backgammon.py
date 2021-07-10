@@ -1,4 +1,5 @@
 import itertools
+import math
 from collections import namedtuple
 
 WHITE = 0
@@ -59,6 +60,9 @@ class Backgammon:
         self.players_home_positions = {WHITE: [5, 4, 3, 2, 1, 0], BLACK: [18, 19, 20, 21, 22, 23]}
         self.players_positions = self.get_players_positions()
         self.state = self.save_state()
+        self.game_rate = 1.0
+        self.last_offer_player = None
+        self.is_offer_to_double = 0.0
 
     def can_bear_off(self, player):
         tot = [self.board[position][0] for position in self.players_home_positions[player] if player == self.board[position][1]]
@@ -1483,7 +1487,11 @@ class Backgammon:
         - 2 units indicating who is the current player
         - 2 units for white and black bar checkers
         - 2 units for white and block off checkers
-        - tot = 192 + 2 + 2 + 2 = 198
+        - 1 units for game rate
+        - 2 units for offer to double
+        - 2 units for white right to double
+        - 2 units for block right to double
+        - tot = 192 + 2 + 2 + 2 + 1 + 1 + 1 + 1 = 202
         """
         features_vector = []
         for p in [WHITE, BLACK]:
@@ -1502,12 +1510,24 @@ class Backgammon:
             features_vector += [self.bar[p] / 2.0, self.off[p] / 15.0]
 
         if current_player == WHITE:
-            # features_vector += [0.0, 1.0]
             features_vector += [1.0, 0.0]
         else:
-            # features_vector += [1.0, 0.0]
             features_vector += [0.0, 1.0]
-        assert len(features_vector) == 198, print("Should be 198 instead of {}".format(len(features_vector)))
+
+        features_vector += [math.log2(self.game_rate)]
+        features_vector += [self.is_offer_to_double] # TODO: Offer to double
+
+        # Right to double
+        if math.log2(self.game_rate) == 6.0:
+            features_vector += [0.0, 0.0]
+        if self.last_offer_player is None:
+            features_vector += [1.0, 1.0]
+        elif self.last_offer_player == WHITE:
+            features_vector += [0.0, 1.0]
+        else:
+            features_vector += [0.0, 1.0]
+        
+        assert len(features_vector) == 202, print("Should be 202 instead of {}".format(len(features_vector)))
         return features_vector
 
 

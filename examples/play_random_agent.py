@@ -45,16 +45,10 @@ def make_plays():
         print("Current player={} ({} - {}) | Roll={}".format(agent.color, TOKEN[agent.color], COLORS[agent.color], roll))
 
         actions = env.get_valid_actions(roll)
-
-        # print("\nLegal Actions:")
-        # for a in actions:
-        #     print(a)
-
         action = agent.choose_best_action(actions, env)
 
         observation_next, reward, done, winner = env.step(action)
 
-        # env.render(mode='human')
         env.render(mode = 'rgb_array')
 
         if done:

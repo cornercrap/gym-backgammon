@@ -54,8 +54,8 @@ def make_plays():
 
         observation_next, reward, done, winner = env.step(action)
 
-        # env.render(mode='human')
-        env.render(mode = 'rgb_array')
+        env.render(mode='human')
+        # env.render(mode = 'rgb_array')
 
         if done:
             if winner is not None:
